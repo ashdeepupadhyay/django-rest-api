@@ -18,22 +18,22 @@ from django.views.decorators.csrf import csrf_exempt
 class GenericApiView(generics.GenericAPIView,mixins.ListModelMixin,mixins.CreateModelMixin,mixins.UpdateModelMixin,mixins.RetrieveModelMixin,mixins.DestroyModelMixin):
     serializer_class=ArticleSerializers#serializer_class variable name cannot be changed
     queryset=Article.objects.all()#queryset variable name cannot be changed
-    #lookup_field = 'id'
+    lookup_field = 'id'
 
-    def get(self,request):
-    #    if id:
-    #        return self.retrieve(request)
-    #    else:
-        return self.list(request)
+    def get(self,request,id=None):
+        if id:
+            return self.retrieve(request)
+        else:
+            return self.list(request)
     
     def post (self,request):
         return self.create(request)
     
-    #def put (self,request,id=None):
-    #    return self.update(request,id)
+    def put (self,request,id=None):
+        return self.update(request,id)
 
-    #def delete(self,request,id):
-    #    return self.destroy(request,id)
+    def delete(self,request,id):
+        return self.destroy(request,id)
 
 class ArticleAPIView(APIView):
     def get(self,request):
