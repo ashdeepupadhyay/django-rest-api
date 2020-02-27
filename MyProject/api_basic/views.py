@@ -13,8 +13,36 @@ from rest_framework import generics,mixins
 
 from rest_framework.authentication import SessionAuthentication , TokenAuthentication,BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+
+from rest_framework import viewsets
+
+from django.shortcuts import get_object_or_404
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
+
+class ArticleViewSet(viewsets.ViewSet):
+    def list(self,request):
+        articles=Article.objects.all()
+        serilizer=ArticleSerializers(articles,many=True)#if more than one instance then TRUE else FALSE
+        return Response(serilizer.data) 
+    def create(self,request):
+        serilizer = ArticleSerializers(data=request.data)
+        if serilizer.is_valid():
+            serilizer.save()
+            return Response(serilizer.data,status=status.HTTP_201_CREATED)
+        return Response(serilizer.errors ,status=status.HTTP_400_BAD_REQUEST)
+    def retrieve(self,request,pk=None):
+        queryset = Article.objects.all()
+        article = get_object_or_404(queryset,pk=pk )
+        serilizer=ArticleSerializers(article)#if more than one instance then TRUE else FALSE
+        return Response(serilizer.data)
+    def update(self,request,pk=None):
+        article=Article.objects.get(pk=pk)
+        serilizer = ArticleSerializers(article,data=request.data)
+        if serilizer.is_valid():
+            serilizer.save()
+            return Response(serilizer.data)
+        return Response(serilizer.errors ,status=status.HTTP_400_BAD_REQUEST)
 
 
 class GenericApiView(generics.GenericAPIView,mixins.ListModelMixin,mixins.CreateModelMixin,mixins.UpdateModelMixin,mixins.RetrieveModelMixin,mixins.DestroyModelMixin):
