@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 
 from rest_framework import generics,mixins
 
-from rest_framework.authentication import SessionAuthentication , BasicAuthentication
+from rest_framework.authentication import SessionAuthentication , TokenAuthentication,BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
@@ -22,7 +22,8 @@ class GenericApiView(generics.GenericAPIView,mixins.ListModelMixin,mixins.Create
     queryset=Article.objects.all()#queryset variable name cannot be changed
     lookup_field = 'id'
     
-    authentication_classes = [SessionAuthentication,BasicAuthentication]
+    authentication_classes = [TokenAuthentication]
+    #authentication_classes = [SessionAuthentication,BasicAuthentication]
     permission_classes=[IsAuthenticated]
 
     def get(self,request,id=None):
