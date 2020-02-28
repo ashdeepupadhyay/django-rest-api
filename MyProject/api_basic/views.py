@@ -20,9 +20,15 @@ from django.shortcuts import get_object_or_404
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
 
+class ArticleViewSet(viewsets.ModelViewSet):
+    serializer_class=ArticleSerializers#serializer_class variable name cannot be changed
+    queryset=Article.objects.all()#queryset variable name cannot be changed
+
+'''
 class ArticleViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,mixins.CreateModelMixin,mixins.UpdateModelMixin,mixins.RetrieveModelMixin,mixins.DestroyModelMixin):
     serializer_class=ArticleSerializers#serializer_class variable name cannot be changed
     queryset=Article.objects.all()#queryset variable name cannot be changed
+'''
 '''
 class ArticleViewSet(viewsets.ViewSet):
     def list(self,request):
